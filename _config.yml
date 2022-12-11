@@ -28,10 +28,17 @@ github_username: jmj073
 
 # Build settings
 theme: minima
-# remote-theme: minima 
+
 plugins:
   - jekyll-feed
   - jekyll-toc
+
+# Conversion
+markdown: kramdown
+highlighter: rouge
+lsi: false
+excerpt_separator: "\n\n"
+incremental: false
 
 # Exclude from processing.
 # The following items will not be processed, by default.
