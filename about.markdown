@@ -4,15 +4,15 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
-
-You can find the source code for Minima at GitHub:
-[jekyll][jekyll-organization] /
-[minima](https://github.com/jekyll/minima)
-
-You can find the source code for Jekyll at GitHub:
-[jekyll][jekyll-organization] /
-[jekyll](https://github.com/jekyll/jekyll)
 
 
-[jekyll-organization]: https://github.com/jekyll
+의견은 환영입니다.
+
+이 블로그의 목적은 다음과 같습니다.
+
+1. 생각과 아이디어를 기록하는 것.
+   + 따라서 뇌피셜이 다수 포함될 수 있습니다.
+2. 글쓰기 연습
+
+
+
