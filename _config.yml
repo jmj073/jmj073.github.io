@@ -31,7 +31,6 @@ theme: minima
 
 plugins:
   - jekyll-feed
-  - jekyll-toc
 
 # Conversion
 markdown: kramdown
