@@ -8,8 +8,6 @@ on_hold: false
 use_math: false
 ---
 
-# Continuation과 `call/cc`
-
 {% comment %}
 
 [toc]
@@ -25,7 +23,7 @@ use_math: false
 
 그럼 continuation과 `call/cc`. 시작하겠다.
 
-## 들어가기에 앞서...
+# 들어가기에 앞서...
 
 이 글에서는 의사 코드가 나온다. scheme 문법을 사용할까 했지만 대부분의 사람들이 이에 익숙하지 않을 것이므로 필자가 임의로 만든 의사 코드?를 사용하겠다.
 
@@ -55,7 +53,7 @@ use_math: false
   fn foo() -> i32 { 3 * 11 } // 33을 반환하는 함수
   ```
 
-## Continuation이란?
+# Continuation이란?
 
 continuation을 단어로서 보자면 "이어지는 무언가"란 의미를 갖는다고 볼 수 있겠다. 이 글의 주제가 되는 "continuation"이란 것도 비슷한 맥락을 가지는 용어라고 볼 수 있다.
 
@@ -74,7 +72,7 @@ instruction3
 > [!info]
 > 참고로, continuation을 "후속문"이라고 번역한 글도 있다. [여기](https://guruma.github.io/posts/2018-11-18-Continuation-Concept/)에서 볼 수 있다.
 
-## Continuation의 사용 예
+# Continuation의 사용 예
 
 구체적으로 continuation이 어떤 기능을 가져다 줄지 알아보자.
 
@@ -82,11 +80,11 @@ instruction3
 
 예를 들어 이중 반복문을 실행하다가 빠져나가는데 사용될 수도 있다. 즉, 다음에 실행될 것(continuation)을 반복문의 다음 반복이 아닌 반복문 후에 실행될 것(continuation)으로 바꾸면 된다. 이 뿐만 아니라 예외(exception)나, 코루틴(coroutine) 같은 제어 요소를 구현하는 데에도 사용할 수 있다.
 
-## Scheme에서의 Continuation
+# Scheme에서의 Continuation
 
 [first-class](https://ko.wikipedia.org/wiki/%EC%9D%BC%EA%B8%89_%EA%B0%9D%EC%B2%B4) continuation을 처음으로 지원한 언어는 scheme이다. [The Scheme Programming Language](https://www.scheme.com/tspl4/further.html#./further:h3)라는 책은 continuation에 대해 어떻게 설명했는지 한번 살펴보자.
 
-### Scheme의 문법
+## Scheme의 문법
 
 일단 본격적으로 설명하기 전에 scheme의 문법에 대해 짚고 넘어가 보자.
 
@@ -128,7 +126,7 @@ scheme은 lisp(list processing) 프로그래밍 언어의 방언이다. lisp 언
 > [!info]
 > core syntactic form에 반복에 관한 것이 없다는 것을 알 수 있다. scheme은 반복을 표현하기 위해 tail recursion(꼬리 재귀)를 사용하며, scheme의 구현체는 tail-call optimization을 수행해야 한다.
 
-### 설명!
+## 설명!
 
 scheme expression을 evaluate[^eval]하는 동안, 구현체(scheme의 구현체)는 두 가지를 추적해야 한다.
 
@@ -159,9 +157,9 @@ expression을 evaluate하는 동안 어느 시점에서든, 해당 지점에서 
 > [!note]
 > `(cdr x)`의 continuation은 `(if (null? x) (quote ()) (cdr x))`의 continuation과 같기 때문에 위에 나열되지 않았다.
 
-## 언어에서의 Continuation 지원
+# 언어에서의 Continuation 지원
 
-### `call-with-current-continuation`(`call/cc`)
+## `call-with-current-continuation`(`call/cc`)
 
 scheme은 first-class continuation의 지원을 위해 `call-with-current-continuation`(대부분의 구현체에서 `call/cc`라는 별칭을 가짐)라는 함수를 제공한다. 참고로 scheme은 함수 이름에 `-`나 `/`를 사용할 수 있다.
 
@@ -201,7 +199,7 @@ call_cc(function(k) { 5 * k(4) })
   let cc = function() { call_cc(identity) };
   ```
 
-### `call/cc` Continuation의 범위
+## `call/cc` Continuation의 범위
 
 continuation의 범위에 대해 먼저 설명해야 할지, 아니면 `call/cc`의 사용 예에 대해 먼저 설명해야 할지 고민이었지만, 범위먼저 설명하기로 한 이유는 범위에 대해 이해해야지 예시의 동작을 명확하게 할 수 있을것이라 생각했기 때문이다. 하지만 예시에 대해 알아보는 것도 범위에 대해 이해하는데에 도움이 될 것이라 생각하기 때문에, 아직 `call/cc`의 사용 방법에 대해 감이 잘 잡히지 않는다면 예시를 먼저 보고오는 것도 좋을 것이다.
 
@@ -243,7 +241,7 @@ continuation의 범위를 `<program>`으로 할 수 있을까?라는 의문이 �
 
 아무튼 scheme의 continuation의 범위는 `<form>`이고, 필자는 의사 코드의 continuation의 범위를 정할 필요가 있다. 앞서 의사코드 program은 0개 이상의 statement의 나열로 이루어진다고 했으므로, 각각의 최상위 statement(다른 statement에 포함되지 않는 statement)를 continuation의 범위로 정하겠다.
 
-### `call/cc`를 사용해보자!
+## `call/cc`를 사용해보자!
 
 여기서는 `call/cc`의 사용 예에 대해 좀더 다루겠다. 간단한 예시들을 다룰 것이며, coroutine 같은 것은 "continuation의 응용"에서 다룰 것이다. 참고로 예시들중에 몇몇은 [The Scheme Programming Language](https://www.scheme.com/tspl3/further.html#./further:h3)와 [여기](https://guruma.github.io/posts/2018-11-18-Continuation-Concept/#_%ED%9B%84%EC%86%8D%EB%AC%B8_%EC%9D%B4%EB%94%94%EC%97%84)를 참고하였다. 의사 코드는 실행이 불가능하니 직접 실행해 보고 싶다면 두 글의 scheme 코드를 실행해 보자.
 
@@ -369,7 +367,7 @@ continuation의 범위를 `<program>`으로 할 수 있을까?라는 의문이 �
     hi
     ```
 
-#### 음양
+### 음양
 
 예시중 하나인 음양에 대한 설명은 길어질 것 같으므로 섹션을 따로 만들었다. 일단 음양(yin-yang)의 코드는 다음과 같다.
 
@@ -478,13 +476,13 @@ OUTPUT(n) =
 
 음양은 더 다뤄볼까 했으나 더하다간 음양오행(陰陽五行)까지 나올 것 같으므로, 음양은 언젠가 글을 한번 따로 써보도록 하겠다.
 
-## 나오기에 앞서...
+# 나오기에 앞서...
 
 사실 글을 시리즈로 나누지 않고 하나로 적으려 했지만 생각보다 글이 길어지고, 자료조사와 글을 작성하는 일이 매우 귀찮은 일이라는 것을 깨달았기 때문에 다음으로 미루기로 했다. continuation을 "계속할 준비가 된 continuation"에서, "계산을 완료할 continuation"으로 바꿨을 뿐이다. 이 `<program>`은 `<form>`이 하나이지는 않을 것이다. 하지만 필자는 타임머신이 없기 때문에 확답은 못한다.
 
 글을 적으면서 약간 아쉽기도 했다. 이론에 대해 아는게 적다보니 글의 깊이가 얕아지는 듯 하다. 어쨌든 다음은 "delimited continuation"이다. 사실 필자는 이 글을 적는 현 시점에 delimited continuation에 대해 아는 것이 없으므로 공부한다음에 다음 편을 내보도록 하겠다.
 
-## Reference
+# Reference
 
 + [후속문(Continuation) : 제1부. 개념과 call/cc](https://guruma.github.io/posts/2018-11-18-Continuation-Concept/)
 + [the scheme programming language: continuation](https://www.scheme.com/tspl3/further.html#./further:h3)[^TSPL]
