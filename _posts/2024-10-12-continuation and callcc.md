@@ -96,22 +96,22 @@ scheme은 lisp(list processing) 프로그래밍 언어의 방언이다. lisp 언
 참고로 scheme의 문법은 다음과 같다.
 
 ```
-<program>				-> <form>*
-<form> 					-> <definition> | <expression>
-<definition>			->	<variable definition> | (begin <definition>*)
-<variable definition>	-> (define <variable> <expression>)
-<expression>			-> <constant>
-						|	<variable>
-						|	(quote <datum>)
-						|	(lambda <formals> <expression> <expression>*)
-						|	(if <expression> <expression> <expression>)
-						|	(set! <variable> <expression>)
-						|	<application>
-<constant>				-> <boolean> | <number> | <character> | <string>
-<formals>				-> <variable>
-						|	(<variable>*)
-						|	(<variable> <variable>* . <variable>)
-<application>			-> (<expression> <expression>*)
+<program>               -> <form>*
+<form>                  -> <definition> | <expression>
+<definition>            -> <variable definition> | (begin <definition>*)
+<variable definition>   -> (define <variable> <expression>)
+<expression>            -> <constant>
+                        |   <variable>
+                        |   (quote <datum>)
+                        |   (lambda <formals> <expression> <expression>*)
+                        |   (if <expression> <expression> <expression>)
+                        |   (set! <variable> <expression>)
+                        |   <application>
+<constant>              -> <boolean> | <number> | <character> | <string>
+<formals>               -> <variable>
+                        |   (<variable>*)
+                        |   (<variable> <variable>* . <variable>)
+<application>           -> (<expression> <expression>*)
 ```
 
 > [!note]
