@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jmj073.github.io/sitemap.xml
