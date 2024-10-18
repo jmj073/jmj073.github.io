@@ -55,9 +55,11 @@ use_math: false
 
 # Continuation이란?
 
-continuation을 단어로서 보자면 "이어지는 무언가"란 의미를 갖는다고 볼 수 있겠다. 이 글의 주제가 되는 "continuation"이란 것도 비슷한 맥락을 가지는 용어라고 볼 수 있다.
+continuation을 단어로서 보자면 "이어지는 무언가"란 의미를 갖는다고 볼 수 있겠다. "무언가"는 여러가지가 될 수 있다. 예를 들어, 단어, 도로, 코드 등.
 
-예를 들어 보자. 아래의 예에서 `instruction2 instruction3 ...`는 현재 명령인 `instruction1`의 뒤로 이어지는(continuation) 흐름으로 볼 수 있다. 이를 continuation이라 부른다. 즉, `instruction1`을 기준으로 `instruction2 instruction3 ...`가 continuation이 되는 것이다.
+단어의 경우를 예로 들어보자. `hello world`라는 단어의 나열이 있을 때, `world`는 `hello`의 뒤로 "이어지는 단어"이다. 즉, `hello`를 기준으로 `world`는 continuation이 되는 것이다. 여기서 **''`world`는 "`hello`의 continuation"이다**, 라는 표현을 사용할 수 있다.
+
+이 글의 주제가 되는 continution은 "이어지는 코드"이다. 예를 들어 보자. 아래의 코드 블록에서 `instruction2 instruction3 ...`는 현재 명령인 `instruction1`의 뒤로 "이어지는 코드"로 볼 수 있다. 즉, `instruction1`을 기준으로 `instruction2 instruction3 ...`는 continuation이 되는 것이다. 여기서 **`instruction2 instruction3 ...`는 "`instruction1`의 continuation"이다**, 라는 표현을 사용할 수 있다.
 
 ``` 
 instruction0
@@ -66,8 +68,6 @@ instruction2
 instruction3
 ...
 ```
-
-이게 끝이다.
 
 > [!info]
 > 참고로, continuation을 "후속문"이라고 번역한 글도 있다. [여기](https://guruma.github.io/posts/2018-11-18-Continuation-Concept/)에서 볼 수 있다.
