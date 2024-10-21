@@ -25,7 +25,7 @@ use_math: false
 
 # 들어가기에 앞서...
 
-이 글에서는 의사 코드가 나온다. scheme 문법을 사용할까 했지만 대부분의 사람들이 이에 익숙하지 않을 것이므로 필자가 임의로 만든 의사 코드?를 사용하겠다.
+이 글에서는 의사 코드가 나온다. Scheme 문법을 사용할까 했지만 대부분의 사람들이 이에 익숙하지 않을 것이므로 필자가 임의로 만든 의사 코드?를 사용하겠다.
 
 이 글에서 나오는 의사 코드의 특징:
 + program은 0개 이상의 statement의 나열로 이루어진다. 예시는 다음과 같다.
@@ -57,9 +57,9 @@ use_math: false
 
 continuation을 단어로서 보자면 "이어지는 무언가"란 의미를 갖는다고 볼 수 있겠다. "무언가"는 여러가지가 될 수 있다. 예를 들어, 단어, 도로, 코드 등.
 
-단어의 경우를 예로 들어보자. `hello world`라는 단어의 나열이 있을 때, `world`는 `hello`의 뒤로 "이어지는 단어"이다. 즉, `hello`를 기준으로 `world`는 continuation이 되는 것이다. 여기서 **''`world`는 "`hello`의 continuation"이다**, 라는 표현을 사용할 수 있다.
+단어의 경우를 예로 들어보자. `hello world`라는 단어의 나열이 있을 때, `world`는 `hello`의 뒤로 "이어지는 단어"이다. 즉, `hello`를 기준으로 `world`는 continuation이 되는 것이다. 여기서 "`world`"는 "`hello`의 continuation"이라고 표현할 수 있다.
 
-이 글의 주제가 되는 continution은 "이어지는 [제어 흐름](https://en.wikipedia.org/wiki/Control_flow)"이다. 그냥 간단하게 "이어지는 코드"라고 생각하자. 예를 들어 보자. 아래의 코드 블록에서 `instruction2 instruction3 ...`는 현재 명령인 `instruction1`의 뒤로 "이어지는 코드"로 볼 수 있다. 즉, `instruction1`을 기준으로 `instruction2 instruction3 ...`는 continuation이 되는 것이다. 여기서 **`instruction2 instruction3 ...`는 "`instruction1`의 continuation"이다**, 라는 표현을 사용할 수 있다.
+이 글의 주제가 되는 continution은 "이어지는 [제어 흐름](https://en.wikipedia.org/wiki/Control_flow)"이다. 그냥 간단하게 "이어지는 코드"라고 생각하자. 예를 들어 보자. 아래의 코드 블록에서 `instruction2 instruction3 ...`는 현재 명령인 `instruction1`의 뒤로 "이어지는 코드"로 볼 수 있다. 즉, `instruction1`을 기준으로 `instruction2 instruction3 ...`는 continuation이 되는 것이다. 여기서 "`instruction2 instruction3 ...`"는 "`instruction1`의 continuation"이라고 표현할 수 있다.
 
 ``` 
 instruction0
@@ -82,18 +82,18 @@ instruction3
 
 # Scheme에서의 Continuation
 
-[first-class](https://ko.wikipedia.org/wiki/%EC%9D%BC%EA%B8%89_%EA%B0%9D%EC%B2%B4) continuation을 처음으로 지원한 언어는 scheme이다. [The Scheme Programming Language](https://www.scheme.com/tspl4/further.html#./further:h3)라는 책은 continuation에 대해 어떻게 설명했는지 한번 살펴보자.
+[first-class](https://ko.wikipedia.org/wiki/%EC%9D%BC%EA%B8%89_%EA%B0%9D%EC%B2%B4) continuation을 처음으로 지원한 언어는 Scheme이다. [The Scheme Programming Language](https://www.scheme.com/tspl4/further.html#./further:h3)라는 책은 continuation에 대해 어떻게 설명했는지 한번 살펴보자.
 
 ## Scheme의 문법
 
-일단 본격적으로 설명하기 전에 scheme의 문법에 대해 짚고 넘어가 보자.
+일단 본격적으로 설명하기 전에 Scheme의 문법에 대해 짚고 넘어가 보자.
 
-scheme은 lisp(list processing) 프로그래밍 언어의 방언이다. lisp 언어는 괄호쌍으로 list의 원소들을 묶어서 [s-expression](https://en.wikipedia.org/wiki/S-expression)을 표현하는 방식을 사용한다. 아래는 그 예시이다:
+Scheme은 Lisp(LISt Processing) 프로그래밍 언어의 방언이다. Lisp 언어는 괄호쌍으로 list의 원소들을 묶어서 [s-expression](https://en.wikipedia.org/wiki/S-expression)을 표현하는 방식을 사용한다. 아래는 그 예시이다:
 
 + **일반적인? 프로그래밍 언어**: `print(4 * 3)`
 + **lisp**: `(print (* 4 3))`
 
-참고로 scheme의 문법은 다음과 같다.
+참고로 Scheme의 문법은 다음과 같다.
 
 ```
 <program>               -> <form>*
@@ -118,17 +118,17 @@ scheme은 lisp(list processing) 프로그래밍 언어의 방언이다. lisp 언
 > 혹시 위의 문법이랍시고 적어놓은게 뭔지 잘 모르겠다면 [여기](https://ko.wikipedia.org/wiki/%EB%B0%B0%EC%BB%A4%EC%8A%A4-%EB%82%98%EC%9A%B0%EB%A5%B4_%ED%91%9C%EA%B8%B0%EB%B2%95)를 참고하자.
 
 > [!note]
-> scheme은 function 대신 procedure를, call(함수 호출) 대신 apply(프로시저 적용)라는 용어를 사용하는 경향이 있다. 위의 문법에서 `<application>`은 함수 호출이라 보면 된다.
+> Scheme은 function 대신 procedure를, call(함수 호출) 대신 apply(프로시저 적용)라는 용어를 사용하는 경향이 있다. 위의 문법에서 `<application>`은 함수 호출이라 보면 된다.
 
 > [!info]
-> 기본 문법, 즉,  core syntactic form(예: lambda, if)은 몇개 없지만, scheme은 syntactic extension을 정의할 수 있으며, syntactic extension은 한번 정의되고 나면, core form과 정확히 동일한 상태를 갖는다.
+> 기본 문법, 즉,  core syntactic form(예: lambda, if)은 몇개 없지만, Scheme은 syntactic extension을 정의할 수 있으며, syntactic extension은 한번 정의되고 나면, core form과 정확히 동일한 상태를 갖는다.
 
 > [!info]
-> core syntactic form에 반복에 관한 것이 없다는 것을 알 수 있다. scheme은 반복을 표현하기 위해 tail recursion(꼬리 재귀)를 사용하며, scheme의 구현체는 tail-call optimization을 수행해야 한다.
+> core syntactic form에 반복에 관한 것이 없다는 것을 알 수 있다. Scheme은 반복을 표현하기 위해 tail recursion(꼬리 재귀)를 사용하며, Scheme의 구현체는 tail-call optimization을 수행해야 한다.
 
 ## 설명!
 
-scheme expression을 evaluate[^eval]하는 동안, 구현체(scheme의 구현체)는 두 가지를 추적해야 한다.
+Scheme expression을 evaluate[^eval]하는 동안, 구현체(Scheme의 구현체)는 두 가지를 추적해야 한다.
 
 1. what to evaluate(무엇을 평가할지, 평가할 대상)
 2. what to do with the value(그 값으로 무엇을 할지, 값으로 할 행위)
@@ -161,7 +161,7 @@ expression을 evaluate하는 동안 어느 시점에서든, 해당 지점에서 
 
 ## `call-with-current-continuation`(`call/cc`)
 
-scheme은 first-class continuation의 지원을 위해 `call-with-current-continuation`(대부분의 구현체에서 `call/cc`라는 별칭을 가짐)라는 함수를 제공한다. 참고로 scheme은 함수 이름에 `-`나 `/`를 사용할 수 있다.
+Scheme은 first-class continuation의 지원을 위해 `call-with-current-continuation`(대부분의 구현체에서 `call/cc`라는 별칭을 가짐)라는 함수를 제공한다. 참고로 Scheme은 함수 이름에 `-`나 `/`를 사용할 수 있다.
 
 `call-with-current-continuation`이라는 이름에서도 알 수 있듯이, `call/cc`는 함수를 인수로 받아 해당 함수에 continuation을 인수로 넘겨서 호출한다. 예를 들어서 설명해 보겠다.
 
@@ -210,12 +210,12 @@ expression을 evaluate하는 동안 어느 시점에서든, 해당 지점에서 
 
 이 문장에서 "계산을 완료할 continuation"이 어느 부분인지를 살펴볼 것이다. "계산을 완료할 continuation"이 어느 부분인지 안다는 것은 어떤 continuation의 끝이 어디인지 안다는 것이다. 재귀 함수의 base case와 비슷한 맥락이라고 생각하면 된다.
 
-필자의 생각으론 scheme에서 continuation의 범위는 `<form>`이다. `<form>`에는 `<definition>`도 포함되지만, 그부분은 신경쓰지 말자... 어쨌든 `<form>`의 continuation이 "계산을 완료할 continuation"이 되는 것이다.
+필자의 생각으론 Scheme에서 continuation의 범위는 `<form>`이다. `<form>`에는 `<definition>`도 포함되지만, 그부분은 신경쓰지 말자... 어쨌든 `<form>`의 continuation이 "계산을 완료할 continuation"이 되는 것이다.
 
 그래서, 아래의 예시에서는:
 
 ```scheme
-; 참고로 이 예시는 scheme의 구현중 하나인 chicken scheme에서 실행되었다
+; 참고로 이 예시는 Scheme의 구현중 하나인 Chicken Scheme에서 실행되었다
 (define k (cc)); 변수 k를 정의하고 (cc)의 값으로 초기화. cc(current-continuation)는 위에서 언급된 함수이다.
 (print k); 변수 k를 출력.
 (k 3); 인수를 3으로 k를 호출.
@@ -239,11 +239,11 @@ Error: call of non-procedure: 3; 3번 줄
 
 continuation의 범위를 `<program>`으로 할 수 있을까?라는 의문이 들지도 모르겠지만, 일단 그전에 타임머신을 만들 수 있을지를 먼저 따져봐야 할 것이다. 왜냐하면 lisp는 [read-eval-print loop](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop)(REPL)를 제공하기 때문이다. continuation의 범위가 `<program>`이라면 특정 continuation 오브젝트의 호출 시점에 전체 프로그램을 알아야 하는데 타임머신을 사용하는 것 외에는 알길이 있을 것 같지는 않다.
 
-아무튼 scheme의 continuation의 범위는 `<form>`이고, 필자는 의사 코드의 continuation의 범위를 정할 필요가 있다. 앞서 의사코드 program은 0개 이상의 statement의 나열로 이루어진다고 했으므로, 각각의 최상위 statement(다른 statement에 포함되지 않는 statement)를 continuation의 범위로 정하겠다.
+아무튼 Scheme의 continuation의 범위는 `<form>`이고, 필자는 의사 코드의 continuation의 범위를 정할 필요가 있다. 앞서 의사코드 program은 0개 이상의 statement의 나열로 이루어진다고 했으므로, 각각의 최상위 statement(다른 statement에 포함되지 않는 statement)를 continuation의 범위로 정하겠다.
 
 ## `call/cc`를 사용해보자!
 
-여기서는 `call/cc`의 사용 예에 대해 좀더 다루겠다. 간단한 예시들을 다룰 것이며, coroutine 같은 것은 "continuation의 응용"에서 다룰 것이다. 참고로 예시들중에 몇몇은 [The Scheme Programming Language](https://www.scheme.com/tspl3/further.html#./further:h3)와 [여기](https://guruma.github.io/posts/2018-11-18-Continuation-Concept/#_%ED%9B%84%EC%86%8D%EB%AC%B8_%EC%9D%B4%EB%94%94%EC%97%84)를 참고하였다. 의사 코드는 실행이 불가능하니 직접 실행해 보고 싶다면 두 글의 scheme 코드를 실행해 보자.
+여기서는 `call/cc`의 사용 예에 대해 좀더 다루겠다. 간단한 예시들을 다룰 것이며, coroutine 같은 것은 "continuation의 응용"에서 다룰 것이다. 참고로 예시들중에 몇몇은 [The Scheme Programming Language](https://www.scheme.com/tspl3/further.html#./further:h3)와 [여기](https://guruma.github.io/posts/2018-11-18-Continuation-Concept/#_%ED%9B%84%EC%86%8D%EB%AC%B8_%EC%9D%B4%EB%94%94%EC%97%84)를 참고하였다. 의사 코드는 실행이 불가능하니 직접 실행해 보고 싶다면 두 글의 Scheme 코드를 실행해 보자.
 
 + **탈출 만들기**: 다음은 `it` iterator의 각 숫자를 곱하여 결과를 반환하는 함수이다. 원소에 `0`이 있으면 항상 결과가 `0`이 되므로, 그 뒤를 계산할 필요가 없기 때문에 continuation을 사용하여 `0`을 바로 반환한다.
   
@@ -282,7 +282,8 @@ continuation의 범위를 `<program>`으로 할 수 있을까?라는 의문이 �
     "hi"
     ```
     
-+ **ii**: (scheme으로 볼 때는 복잡해 보였는데 `cc`와 `identity`로 인해 간단해보인다...)
++ **ii**: (Scheme으로 볼 때는 복잡해 보였는데 `cc`와 `identity`로 인해 간단해보인다...)
+    
     ```javascript
     cc()(identity)("HEY!")
     => "HEY!"
@@ -379,7 +380,7 @@ continuation의 범위를 `<program>`으로 할 수 있을까?라는 의문이 �
 };
 ```
 
-위 코드는 scheme으로 되어 있던 것을 의사 코드로 옮긴 것이다. 사실 아래 코드와 출력 결과가 다를게 없지만, 위 코드가 더 있어보인다.
+위 코드는 Scheme으로 되어 있던 것을 의사 코드로 옮긴 것이다. 사실 아래 코드와 출력 결과가 다를게 없지만, 위 코드가 더 있어보인다.
 
 ```javascript
 {
@@ -485,8 +486,8 @@ OUTPUT(n) =
 # Reference
 
 + [후속문(Continuation) : 제1부. 개념과 call/cc](https://guruma.github.io/posts/2018-11-18-Continuation-Concept/)
-+ [the scheme programming language: continuation](https://www.scheme.com/tspl3/further.html#./further:h3)[^TSPL]
-+ **scheme wiki**:
++ [The Scheme Programming Language: continuation](https://www.scheme.com/tspl3/further.html#./further:h3)[^TSPL]
++ **Scheme wiki**:
   + [call-with-current-continuation](http://community.schemewiki.org/?call-with-current-continuation)
 + **wikipedia**:
   + [Continuation](https://en.wikipedia.org/wiki/Continuation)
