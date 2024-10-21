@@ -59,7 +59,7 @@ continuation을 단어로서 보자면 "이어지는 무언가"란 의미를 갖
 
 단어의 경우를 예로 들어보자. `hello world`라는 단어의 나열이 있을 때, `world`는 `hello`의 뒤로 "이어지는 단어"이다. 즉, `hello`를 기준으로 `world`는 continuation이 되는 것이다. 여기서 **''`world`는 "`hello`의 continuation"이다**, 라는 표현을 사용할 수 있다.
 
-이 글의 주제가 되는 continution은 "이어지는 코드"이다. 예를 들어 보자. 아래의 코드 블록에서 `instruction2 instruction3 ...`는 현재 명령인 `instruction1`의 뒤로 "이어지는 코드"로 볼 수 있다. 즉, `instruction1`을 기준으로 `instruction2 instruction3 ...`는 continuation이 되는 것이다. 여기서 **`instruction2 instruction3 ...`는 "`instruction1`의 continuation"이다**, 라는 표현을 사용할 수 있다.
+이 글의 주제가 되는 continution은 "이어지는 [제어 흐름](https://en.wikipedia.org/wiki/Control_flow)"이다. 그냥 간단하게 "이어지는 코드"라고 생각하자. 예를 들어 보자. 아래의 코드 블록에서 `instruction2 instruction3 ...`는 현재 명령인 `instruction1`의 뒤로 "이어지는 코드"로 볼 수 있다. 즉, `instruction1`을 기준으로 `instruction2 instruction3 ...`는 continuation이 되는 것이다. 여기서 **`instruction2 instruction3 ...`는 "`instruction1`의 continuation"이다**, 라는 표현을 사용할 수 있다.
 
 ``` 
 instruction0
