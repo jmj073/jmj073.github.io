@@ -43,7 +43,7 @@ Set-ExecutionPolicy RemoteSigned
 
 > [!NOTE]
 >
-> 이 cmdlet(명령)은 Windows의 PowerShell 실행 정책을 바꾸며, 이는 PowerShell 보안 전략의 일부입니다. 위 명령은 해당 PC에서 PowerShell 스크립트 실행을 허용하게 될겁니다. 하지만, 사실 실행 정책은 PowerShell "스크립트" 실행을 막습니다. PowerShell 실행은 막지 않으므로, 보안에 직접적인 영향은 미미할거라고 생각합니다.
+> 이 cmdlet(명령)은 Windows의 PowerShell 실행 정책을 바꾸며, 이는 PowerShell 보안 전략의 일부입니다. 위 명령은 해당 PC에서 PowerShell 스크립트 실행을 허용하게 될겁니다. 하지만, 사실 실행 정책은 PowerShell "스크립트" 실행을 막습니다. PowerShell 실행은 막지 않으므로, 보안에 직접적인 영향은 아주 **미미**합니다.
 
 만약에 관리자 권한이 없어서 오류가 뜬다면 아래 명령어를 대신 실행해주시기 바랍니다.
 
@@ -67,7 +67,7 @@ Write-Host "Hello, world!"
 
 ### cmdlet
 
-hello world 코드에서 `Write-Host`는 cmdlet(커맨드렛이라고 읽음)이란 것입니다. cmdlet은 독립적인 실행 프로그램이 아니라, PowerShell의 기본 명령입니다. cmdlet은 필요에 따라 로드할 수 있는 PowerShell 모듈로 구성됩니다. cmdlet은 대부분 C#으로 작성된 .NET 클래스이며 이 클래스들은 `Cmdlet` 또는 `PSCmdlet`을 상속받습니다. C#으로 cmdlet 동적 라이브러리를 만들고, PowerShell이 그것을 로드하여 사용한다고 보시면 됩니다.
+hello world 코드에서 `Write-Host`는 cmdlet(커맨드릿이라고 읽음)이란 것입니다. cmdlet은 독립적인 실행 프로그램이 아니라, PowerShell의 기본 명령입니다. cmdlet은 필요에 따라 로드할 수 있는 PowerShell 모듈로 구성됩니다. cmdlet은 대부분 C#으로 작성된 .NET 클래스이며 이 클래스들은 `Cmdlet` 또는 `PSCmdlet`을 상속받습니다. C#으로 cmdlet 동적 라이브러리를 만들고, PowerShell이 그것을 로드하여 사용한다고 보시면 됩니다.
 
 PowerShell은 Verb-Noun(동사-명사) 쌍을 사용하여 cmdlet의 이름을 지정합니다. `Write-Host`도 그렇게 구성된 것을 볼 수 있습니다. PoWeRsHeLl은 일반적으로(명확한 기준은 잘 모르겠습니다) 대소문자를 구분하지 않으며, 따라서 `WrItE-HoSt`라고 써도 아무 문제가 없습니다. 그렇다고 `"Hello, world!"`를 `"HeLlO, WoRlD"`라고 쓰면 그대로 출력됩니다.
 
@@ -75,4 +75,68 @@ PowerShell은 Verb-Noun(동사-명사) 쌍을 사용하여 cmdlet의 이름을 �
 
 ### 인자
 
-`"Hello, world!"`는 `System.String`이라는 타입을 가지는 .NET 객체의 리터럴입니다. 
+`"Hello, world!"`는 `System.String`이라는 타입을 가지는 .NET 객체의 리터럴입니다. PowerShell은 `System.String` 객체를 생성하고 이를 `Write-Host` cmdlet의 `-Object` 매개변수에 바인딩합니다. cmdlet의 매개변수의 타입은 지정되어 있으며, PowerShell은 바인딩중 (타입이 일치하지 않을시) 타입변환을 시도합니다.
+
+#### Parameter Binding
+
+PowerShell의 *parameter binding*은 여러 종류가 있으며, 다음 순서에 의해 일어납니다.
+
+1. named parameter binding
+2. positional parameter binding
+3. pipeline parameter binding
+   1. ByValue
+   2. ByPropertyName
+4. default value
+
+##### Named Parameter Binding
+
+가장 명시적인 방식입니다.
+
+```powershell
+Get-Process -Name powershell -Id 1234
+```
+
+특징으론 순서에 의존하지 않으며, 부분 이름을 허용합니다(예: `-Na` -> `-Name`). 하지만 모호하면 오류가 발생합니다.
+
+##### Positional Parameter Binding
+
+parameter에 position 속성이 정의된경우 사용됩니다.
+
+```powershell
+Get-Process powershell
+```
+
+위는 내부적으로 아래와 같습니다.
+
+```powershell
+Get-Process -Name powershell
+```
+
+##### Pipeline Parameter Binding
+
+이에 대해서는 파이프라인 편에서 알아보겠습니다.
+
+##### Default Value
+
+말그대로 기본값입니다.
+
+### cmdlet 구현 예시
+
+```C#
+[Cmdlet(VerbsCommunications.Write, "Host")] // cmdlet의 이름을 지정
+public class WriteHostCommand : PSCmdlet // PSCmdlet을 상속받음
+{
+    // 속성(property)가 파라미터라는 것을 지정
+    // Position = 0은 positional parameter binding에서 첫 번째 위치임을 뜻함
+    [Parameter(Position = 0)]
+    public object Object { get; set; } // 속성 이름은 파라미터 이름이기도 함
+
+    protected override void ProcessRecord() // cmdlet이 실행되면 호출됨
+    {
+        if (Object == null)
+		    return;
+		print(Object.ToString()); // 출력
+    }
+}
+```
+
